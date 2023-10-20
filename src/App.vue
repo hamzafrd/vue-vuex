@@ -1,26 +1,24 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" class="container" :class="isLoading">
+    <div v-if="!loading">
+      <nav-bar />
+      <h1>IDShop</h1>
+    </div>
+
+    <div v-if="loading">
+      <h1>Loading...</h1>
+    </div>
+    <router-view />
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import NavBar from '@/components/NavBar.vue'
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+const store = useStore()
+
+const loading = computed(() => store.state.loading)
+const isLoading = computed(() => loading.value ? 'h-100  d-flex justify-content-center align-items-center' : 'mt-5')
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
