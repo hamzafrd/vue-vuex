@@ -71,11 +71,11 @@ export default createStore({
 
     mutations: {
         async setProductsData(state) {
-            let product;
+            state.products = []
             state.loading = true
 
             try {
-                product = await axios
+                state.products = await axios
                     .get('https://hplussport.com/api/products/order/price')
                     .then(response => response.data)
                     .catch(e => {
@@ -90,7 +90,6 @@ export default createStore({
             } finally {
                 state.loading = false
             }
-            state.products = product
         },
 
         setSliderStatus(state) {

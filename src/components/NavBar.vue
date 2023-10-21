@@ -1,12 +1,12 @@
 <template lang="html">
     <div class="navbar navbar-light fixed-top">
         <div class="navbar-text ml-auto d-flex">
-            <button class="btn btn-sm btn-outline-success" @click="toggleSlider">
+            <button class="btn btn-sm btn-outline-success" @click="changeSliderStatus">
                 <!-- <i class="fas fa-dollar-sign"></i> -->
                 <font-awesome-icon icon="dollar-sign"></font-awesome-icon>
             </button>
 
-            <div class="ml-2" v-if="getCart.length >= 0">
+            <div class="ml-2" v-if="cart.length >= 0">
                 <button class="btn btn-success btn-sm dropdown-toggle" id="dropdownCart" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <b>Cart :</b>
@@ -15,7 +15,7 @@
                     <price :price="cartTotal"></price>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownCart">
-                    <div v-for="(item, index) in  getCart " :key="index">
+                    <div v-for="(item, index) in  cart " :key="index">
                         <div class="dropdown-item-text text-nowrap text-right">
                             <span class="badge badge-pill badge-warning align-text-top mr-1">
                                 {{ item.qty }}
@@ -24,7 +24,7 @@
                             <b>
                                 <Price :price="item.product.price * item.qty"></Price>
                             </b>
-                            <a href="#" class="badge badge-danger text-white" @click.stop="toggleDelete(index)">-</a>
+                            <a href="#" class="badge badge-danger text-white" @click.stop="removeItem(index)">-</a>
 
                         </div>
                     </div>
@@ -38,7 +38,20 @@
         </div>
     </div>
 </template>
-<script>
+
+<!-- Using Composition and pinia -->
+<script setup>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Price from './PriceItem.vue';
+
+import { useProductsStore } from '@/store/index-pinia';
+import { storeToRefs } from 'pinia';
+const { changeSliderStatus, removeItem } = useProductsStore()
+const { cart, cartTotal, cartQty } = storeToRefs(useProductsStore())
+</script>
+
+<!-- Vuex -->
+<!-- <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Price from './PriceItem.vue';
 
@@ -60,5 +73,5 @@ export default {
         cartQty() { return this.$store.getters.cartQty }
     }
 }
-</script>
+</script> -->
 <style lang="css"></style>

@@ -4,15 +4,22 @@ import 'animate.css/animate.css';
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 
-import { createApp } from 'vue';
-// Pinia
-// import { createPinia } from 'pinia';
-
 import App from './App.vue';
-import { faShoppingCart, faDollarSign } from "@fortawesome/free-solid-svg-icons";
+import { createApp } from 'vue';
 
+// Pinia
+import { createPinia } from 'pinia';
 import router from './router'
-import products from './store'
 
+//vuex
+// import products from './store/index-vuex'
+// app.use(products)
+
+import { faShoppingCart, faDollarSign } from "@fortawesome/free-solid-svg-icons";
 library.add(faShoppingCart, faDollarSign);
-createApp(App).use(router).use(products).mount('#app')
+
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(router)
+app.mount('#app')

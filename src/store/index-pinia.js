@@ -1,9 +1,8 @@
-// import { createStore } from "vuex";
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-export const useProductsStore = defineStore({
-    state: {
+export const useProductsStore = defineStore('store', {
+    state: () => ({
         products: [],
         cart: [],
 
@@ -12,20 +11,28 @@ export const useProductsStore = defineStore({
 
         error: null,
         loading: false,
-    },
+    }),
 
     actions: {
         async fetchProducts() {
-            this.products = []
+            console.log('fetching....');
+            if (this.products.length >= 1) return
+
             this.loading = true
             try {
-                this.products = await axios.get('https://hplussport.com/api/products/order/price')
-                    .then(response => response.data)
-                    .catch(e => console.log(e))
+                this.products = await axios
+                    .get('https://hplussport.com/api/products/order/price')
+                    .then(response => { return response.data })
+                    .catch(e => {
+                        console.log(e)
+                        this.error = e
+                        return []
+                    })
             } catch (e) {
                 console.log(e);
                 this.error = e
             } finally {
+                console.log('Done !');
                 this.loading = false
             }
         },
@@ -70,13 +77,17 @@ export const useProductsStore = defineStore({
     },
 
     getters: {
-        filteredProduct: () => {
-            return this.products.filter((item) => item.price <= this.maxPrice);
+        isLoading(state) {
+            return state.loading ? 'h-100  d-flex justify-content-center align-items-center' : 'mt-5'
         },
 
-        cartTotal() {
+        filteredProduct: (state) => {
+            return state.products.filter((item) => item.price <= state.maxPrice);
+        },
+
+        cartTotal(state) {
             let sum = 0
-            const cart = this.cart
+            const cart = state.cart
             cart.forEach((key, index) => {
                 const totalPrice = cart[index].product.price * cart[index].qty
                 sum += totalPrice
@@ -84,10 +95,10 @@ export const useProductsStore = defineStore({
             return sum;
         },
 
-        cartQty() {
+        cartQty(state) {
             let sum = 0
             this.cart.forEach((key, index) => {
-                const qty = this.cart[index].qty
+                const qty = state.cart[index].qty
                 sum += qty
             })
             return sum

@@ -6,13 +6,32 @@
                 <label class="font-weight-bold mr-2">Max Price</label>
                 <input type="number" class="form-control mx-2" style="width: 60px; text-align: center;" v-model="maxAmount"
                     @change="updateMaxPrice(maxAmount)">
-                <!-- <input type="range" class="custom-range" min="0" max="100" v-model="maxAmount"
-                    @change="updateMaxPrice(maxAmount)"> -->
+                <input type="range" class="custom-range" min="0" max="100" v-model="maxAmount"
+                    @change="updateMaxPrice(maxAmount)">
             </div>
         </div>
     </transition>
 </template>
-<script>
+
+<!-- Using composition -->
+<script setup>
+import { useProductsStore } from '@/store/index-pinia';
+import { storeToRefs } from 'pinia';
+import { computed, ref } from 'vue';
+
+const { maxPrice, sliderStatus } = storeToRefs(useProductsStore())
+const { setMaxPrice } = useProductsStore()
+
+const maxAmount = ref(maxPrice)
+const updateMaxPrice = (price) => setMaxPrice(Number(price))
+
+const sliderState = computed(() => sliderStatus.value ? 'd-flex' : 'd-none')
+</script>
+
+<!-- <script>
+/**
+ * Vuex
+ */
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
@@ -40,4 +59,4 @@ export default {
         }
     }
 }
-</script>
+</script> -->

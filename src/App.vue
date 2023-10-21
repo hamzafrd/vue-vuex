@@ -14,11 +14,20 @@
 
 <script setup>
 import NavBar from '@/components/NavBar.vue'
-import { computed } from 'vue';
-import { useStore } from 'vuex';
 
-const store = useStore()
+import { useProductsStore } from '@/store/index-pinia'
+import { storeToRefs } from 'pinia';
 
-const loading = computed(() => store.state.loading)
-const isLoading = computed(() => loading.value ? 'h-100  d-flex justify-content-center align-items-center' : 'mt-5')
+const { loading, isLoading } = storeToRefs(useProductsStore())
+
+/**
+ * Vuex
+*/
+// import { computed } from 'vue';
+// import { useStore } from 'vuex';
+
+// const store = useStore()
+
+// const loading = computed(() => store.state.loading)
+// const isLoading = computed(() => loading.value ? 'h-100  d-flex justify-content-center align-items-center' : 'mt-5')
 </script>

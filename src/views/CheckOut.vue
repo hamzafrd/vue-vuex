@@ -19,7 +19,7 @@
                 <tr v-for="(item, index) in cart" :key="item.product.id">
                     <td class="text-center">
                         <div class="btn-group">
-                            <button @click="addItem(item.product)" class="btn btn-info">+</button>
+                            <button @click="addItemToCart(item.product)" class="btn btn-info">+</button>
                             <button @click="removeItem(index)" class=" btn btn-outline-info">-</button>
                         </div>
                     </td>
@@ -37,7 +37,18 @@
         <router-link class="btn btn-sm btn-outline-info text-dark" to="/">Back To Shop</router-link>
     </div>
 </template>
-<script>
+
+<!-- Using composition and pinia -->
+<script setup>
+import Price from '@/components/PriceItem.vue'
+
+import { useProductsStore } from '@/store/index-pinia';
+import { storeToRefs } from 'pinia';
+const { cart, cartTotal } = storeToRefs(useProductsStore())
+const { addItemToCart, removeItem } = useProductsStore()
+</script>
+
+<!-- <script>
 import { useStore } from 'vuex';
 import { computed } from 'vue';
 
@@ -66,4 +77,4 @@ export default {
         return { cart, addItem, removeItem, cartTotal }
     }
 }
-</script>
+</script> -->

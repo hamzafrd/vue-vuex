@@ -1,9 +1,9 @@
 <template>
-    <transition-group name="custom" tag="div" @beforeEnter="beforeEnter" @enter="enter" @leave="leave">
-        <div class="row d-flex mb-3 align-items-center" v-for="(item, index) in getFilteredProduct" :key="item.id"
+    <transition-group v-if="products" name="custom" tag="div" @beforeEnter="beforeEnter" @enter="enter" @leave="leave">
+        <div class="row d-flex mb-3 align-items-center" v-for="(item, index) in filteredProduct" :key="item.id"
             :data-index="index">
             <div class="col-1 m-auto">
-                <div class="btn btn-info" @click.stop="addToCart(item)">+</div>
+                <div class="btn btn-info" @click.stop="addItemToCart(item)">+</div>
             </div>
             <div class="col-sm-4">
                 <img :src="item.image" :alt="item.name" class="img-fluid d-block">
@@ -18,47 +18,64 @@
         </div>
     </transition-group>
 </template>
-<script>
+
+<script setup>
 import Price from './PriceItem.vue';
 
-export default {
-    name: 'product-list',
-    components: { Price },
-    methods: {
-        beforeEnter(el) {
-            el.className = 'd-none';
-        },
-        enter(el) {
-            const delay = el.dataset.index * 100;
-            setTimeout(() => {
-                el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeInRight";
-            }, delay);
-        },
-        leave(el) {
-            const delay = el.dataset.index * 100;
-            setTimeout(() => {
-                el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeOutRight";
-            }, delay);
-        },
+/**
+ * Pinia
+ */
+import { useProductsStore } from '@/store/index-pinia'
+import { storeToRefs } from 'pinia';
 
-        addToCart(item) {
-            this.$store.dispatch("addItemToCart", item)
-        },
+const store = useProductsStore()
 
-    },
-    computed: {
-        getProducts() {
-            return this.$store.state.products
-        },
+// accesing action
+const { addItemToCart, fetchProducts } = store
+// or just like accesing something with vuex
+// store.fetchProducts()
 
-        getFilteredProduct() {
-            return this.$store.getters.filteredProduct
-        }
+// accesing state/refs and getters
+const { products, filteredProduct } = storeToRefs(store)
 
-    },
+// prevent calling api if product already fetched
+products.value.length < 1 ? fetchProducts() : undefined;
 
-    mounted() {
-        this.$store.dispatch("fetchProducts")
-    }
+function beforeEnter(el) {
+    el.className = 'd-none';
 }
+
+function enter(el) {
+    const delay = el.dataset.index * 100;
+    setTimeout(() => {
+        el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeInRight";
+    }, delay);
+}
+
+function leave(el) {
+    const delay = el.dataset.index * 100;
+    setTimeout(() => {
+        el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeOutRight";
+    }, delay);
+}
+
+/**
+ * vuex
+ */
+
+// import { onMounted, computed } from 'vue';
+// import { useStore } from 'vuex';
+// const store = useStore()
+
+// function addToCart(item) {
+//     store.dispatch("addItemToCart", item)
+// }
+
+// const getFilteredProduct = computed(() => {
+//     return store.getters.filteredProduct
+// })
+
+// onMounted(() => {
+//     store.dispatch("fetchProducts")
+// })
 </script>
