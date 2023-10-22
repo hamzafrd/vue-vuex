@@ -1,24 +1,25 @@
 <template>
     <div>
         <span>
-            {{ this.prefix + Number.parseFloat(this.price).toFixed(this.precision) }}
+            {{ prefix + price.toFixed(precision) }}
         </span>
     </div>
 </template>
-<script>
-export default {
-    props: {
-        price: {
-            type: [String, Number]
-        },
-        prefix: {
-            type: String,
-            default: '$'
-        },
-        precision: {
-            type: Number,
-            default: 2
-        }
+
+<script setup lang="ts">
+
+defineProps({
+    price: {
+        type: Number,
+        default: 0
     },
-}
+    prefix: {
+        type: String,
+        default: '$'
+    },
+    precision: {
+        type: Number,
+        default: 2
+    }
+});
 </script>

@@ -26,10 +26,10 @@
                     <th scope="row">{{ item.product.name }} </th>
                     <th class="text-center"> {{ item.qty }} </th>
                     <th class="text-right">
-                        <Price :price="item.product.price" />
+                        <Price :price="Number(item.product.price)" />
                     </th>
                     <th class="text-right">
-                        <Price :price="item.product.price * item.qty" />
+                        <Price :price="Number(item.product.price) * item.qty" />
                     </th>
                 </tr>
             </tbody>
@@ -39,7 +39,7 @@
 </template>
 
 <!-- Using composition and pinia -->
-<script setup>
+<script setup lang="ts">
 import Price from '@/components/PriceItem.vue'
 
 import { useProductsStore } from '@/store/index-pinia';

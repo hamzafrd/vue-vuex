@@ -12,14 +12,14 @@
                 <div class="text-info">{{ item.name }}</div>
                 <div class="mb-0">{{ item.description }}</div>
                 <div class="h5 float-right">
-                    <Price :price="item.price" />
+                    <Price :price="Number(item.price)" />
                 </div>
             </div>
         </div>
     </transition-group>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Price from './PriceItem.vue';
 
 /**
@@ -41,22 +41,26 @@ const { products, filteredProduct } = storeToRefs(store)
 // prevent calling api if product already fetched
 products.value.length < 1 ? fetchProducts() : undefined;
 
-function beforeEnter(el) {
+function beforeEnter(el: Element): void {
     el.className = 'd-none';
 }
 
-function enter(el) {
-    const delay = el.dataset.index * 100;
-    setTimeout(() => {
-        el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeInRight";
-    }, delay);
+function enter(el: Element): void {
+    if (el instanceof HTMLElement && el.dataset.index) {
+        const delay = Number(el.dataset.index) * 100;
+        setTimeout(() => {
+            el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeInRight";
+        }, delay);
+    }
 }
 
-function leave(el) {
-    const delay = el.dataset.index * 100;
-    setTimeout(() => {
-        el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeOutRight";
-    }, delay);
+function leave(el: Element): void {
+    if (el instanceof HTMLElement && el.dataset.index) {
+        const delay = Number(el.dataset.index) * 100;
+        setTimeout(() => {
+            el.className = "row d-flex mb-3 align-items-center animate__animated animate__fadeOutRight";
+        }, delay);
+    }
 }
 
 /**

@@ -12,8 +12,8 @@
   </div>
 </template>
 
-<script setup>
-import NavBar from '@/components/NavBar.vue'
+<script setup lang="ts">
+import NavBar from "@/components/NavBar.vue"
 
 import { useProductsStore } from '@/store/index-pinia'
 import { storeToRefs } from 'pinia';

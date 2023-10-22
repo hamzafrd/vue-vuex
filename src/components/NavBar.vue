@@ -22,7 +22,7 @@
                             </span>
                             {{ item.product.name }}
                             <b>
-                                <Price :price="item.product.price * item.qty"></Price>
+                                <Price :price="Number(item.product.price) * item.qty"></Price>
                             </b>
                             <a href="#" class="badge badge-danger text-white" @click.stop="removeItem(index)">-</a>
 
@@ -40,7 +40,7 @@
 </template>
 
 <!-- Using Composition and pinia -->
-<script setup>
+<script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Price from './PriceItem.vue';
 

@@ -14,7 +14,7 @@
 </template>
 
 <!-- Using composition -->
-<script setup>
+<script setup lang="ts">
 import { useProductsStore } from '@/store/index-pinia';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
@@ -23,7 +23,7 @@ const { maxPrice, sliderStatus } = storeToRefs(useProductsStore())
 const { setMaxPrice } = useProductsStore()
 
 const maxAmount = ref(maxPrice)
-const updateMaxPrice = (price) => setMaxPrice(Number(price))
+const updateMaxPrice = (price: number) => setMaxPrice(price)
 
 const sliderState = computed(() => sliderStatus.value ? 'd-flex' : 'd-none')
 </script>
