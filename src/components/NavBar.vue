@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div class="navbar navbar-light fixed-top">
         <div class="navbar-text ml-auto d-flex">
             <button class="btn btn-sm btn-outline-success" @click="changeSliderStatus">

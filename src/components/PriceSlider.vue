@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <transition name="custom" enter-active-class="animate__animated animate__fadeInDown"
         leave-active-class="animate__animated animate__fadeOutUp">
         <div v-if="sliderStatus">

@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
     <div>
         <h1>Check Out</h1>
         <table class="table table-hover" v-if="cart.length">
