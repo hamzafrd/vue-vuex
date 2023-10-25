@@ -7,23 +7,27 @@ export const useProductsStore = defineStore("store", {
     products: [] as Product[],
     cart: [] as Cart[],
 
-    maxPrice: 3,
+    maxPrice: 200,
     sliderStatus: false,
 
-    error: null,
+    error: false,
     loading: false,
+
+    title: "",
+    searchQuery: "",
   }),
 
   actions: {
-    async fetchProducts() {
+    async fetchProducts(): Promise<void> {
       console.log("fetching....");
       if (this.products.length >= 1) return;
-
       this.loading = true;
       try {
         this.products = await axios
           .get("https://hplussport.com/api/products/order/price")
           .then((response) => {
+            // console.log(response.data);
+
             return response.data;
           })
           .catch((e) => {
@@ -31,6 +35,7 @@ export const useProductsStore = defineStore("store", {
             this.error = e;
             return [];
           });
+        // console.log(this.products);
       } catch (e: any) {
         console.log(e);
         this.error = e;
@@ -40,12 +45,14 @@ export const useProductsStore = defineStore("store", {
       }
     },
 
-    changeSliderStatus() {
+    changeSliderStatus(): void {
       this.sliderStatus = !this.sliderStatus;
     },
 
-    addItemToCart(productData: any) {
+    addItemToCart(productData: Product): void {
       let productIndex: number = 0;
+      // this.isClicked = false;
+
       const productExist = this.cart.filter((item: Cart, index: number) => {
         if (Number(item.product.id) == Number(productData.id)) {
           productIndex = index;
@@ -58,34 +65,69 @@ export const useProductsStore = defineStore("store", {
       if (productExist.length) {
         this.cart[productIndex].qty++;
       } else {
+        this.error = true;
+        setTimeout(() => {
+          this.error = false;
+        }, 2000);
         this.cart.push({ product: productData, qty: 1 });
       }
     },
 
-    setProductsData(productsData: Product[]) {
+    setProductsData(productsData: Product[]): void {
       this.products = productsData;
     },
 
-    setMaxPrice(maxPrice: number) {
+    setMaxPrice(maxPrice: number): void {
       this.maxPrice = maxPrice;
     },
 
-    removeItem: function (key: number) {
+    removeItem: function (key: number): void {
       if (this.cart[key].qty > 1) {
         this.cart[key].qty--;
       } else {
         this.cart.splice(key, 1);
       }
     },
+
+    setTitle(name: string): void {
+      this.title = name;
+    },
+
+    setSearchQuery(query: string): void {
+      this.searchQuery = query;
+    },
   },
 
   getters: {
     isLoading(state) {
-      return state.loading ? "h-100  d-flex justify-content-center align-items-center" : "mt-5";
+      return state.loading
+        ? "h-100 d-flex justify-content-center align-items-center"
+        : "container-fluid";
     },
 
-    filteredProduct: (state) => {
-      return state.products.filter((item) => Number(item.price) <= state.maxPrice);
+    isItemInCart(state) {
+      return (itemId: string) => {
+        // let isDisabled: string = "";
+        // state.cart.forEach((e) => {
+        //   if (e.product.id === itemId) {
+        //     isDisabled = "disabled";
+        //   }
+        // });
+        // return isDisabled;
+        for (const cartItem of state.cart) {
+          if (cartItem.product.id === itemId) {
+            return "disabled";
+          }
+        }
+      };
+    },
+
+    filteredProducts: (state) => {
+      return state.products.filter(
+        (item) =>
+          Number(item.price) <= state.maxPrice &&
+          item.name.toLocaleLowerCase().match(state.searchQuery)
+      );
     },
 
     cartTotal(state) {

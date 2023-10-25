@@ -1,8 +1,7 @@
 <template>
-  <div id="app" class="container" :class="isLoading">
+  <div id="app" :class="isLoading">
     <div v-if="!loading">
       <nav-bar />
-      <h1>IDShop</h1>
     </div>
 
     <div v-if="loading">

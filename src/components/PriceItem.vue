@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <span>
-            {{ prefix + price.toFixed(precision) }}
-        </span>
-    </div>
+    <span>
+        {{ prefix + price.toFixed(precision) }}
+    </span>
 </template>
 
 <script setup lang="ts">
