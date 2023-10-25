@@ -3,8 +3,8 @@
         leave-active-class="animate__animated animate__fadeOutUp">
         <div v-if="sliderStatus">
             <div class="d-flex flex-column align-items-center justify-content-center" :class="sliderState">
-                <label class="font-weight-bold mr-2">Max Price</label>
-                <input type="number" class="form-control mx-2" style="width: 60px; text-align: center;" v-model="maxAmount">
+                <label class="font-weight-bold">Max Price</label>
+                <input type="number" class="form-control" style="width: 80px;" v-model="maxAmount">
                 <input type="range" class="custom-range" min="0" max="200" v-model="maxAmount">
             </div>
         </div>

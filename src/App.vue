@@ -1,13 +1,11 @@
 <template>
   <div id="app" :class="isLoading">
-    <div v-if="!loading">
-      <nav-bar />
-    </div>
+    <nav-bar v-if="!loading" />
+    <router-view />
 
     <div v-if="loading">
       <h1>Loading...</h1>
     </div>
-    <router-view />
   </div>
 </template>
 

@@ -126,7 +126,7 @@ export const useProductsStore = defineStore("store", {
       return state.products.filter(
         (item) =>
           Number(item.price) <= state.maxPrice &&
-          item.name.toLocaleLowerCase().match(state.searchQuery)
+          item.name.toLocaleLowerCase().match(state.searchQuery.toLocaleLowerCase())
       );
     },
 
