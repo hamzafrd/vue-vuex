@@ -7,7 +7,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse d-lg-flex" id="navbarScroll">
-                <form class="input-group my-lg-0 mt-sm-3 navbar-nav-scroll flex-lg-grow-1 mx-5" role="search"
+                <form class="input-group my-lg-0 my-3 navbar-nav-scroll flex-lg-grow-1 mx-lg-5" role="search"
                     @submit.prevent="search">
                     <span class="input-group-text">
                         <font-awesome-icon icon="magnifying-glass" />
