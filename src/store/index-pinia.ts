@@ -99,12 +99,6 @@ export const useProductsStore = defineStore("store", {
   },
 
   getters: {
-    isLoading(state) {
-      return state.loading
-        ? "h-100 d-flex justify-content-center align-items-center"
-        : "container-fluid";
-    },
-
     isItemInCart(state) {
       return (itemId: string) => {
         // let isDisabled: string = "";

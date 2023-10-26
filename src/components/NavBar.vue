@@ -16,53 +16,51 @@
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 <div class="navbar-nav-lg mt-lg-0 mt-sm-3 d-flex justify-content-center">
-                    <div v-if="cart.length >= 0">
-                        <div class="nav-item dropdown border" :class="{ 'blink': error }">
-                            <button class="dropdown-toggle btn btn-success" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <div>
-                                    <b>Cart :</b>
-                                    <span class="badge rounded-pill text-bg-warning">
-                                        <font-awesome-icon icon="shopping-cart" />
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                            {{ cartQty }}
-                                            <span class="visually-hidden">unread messages</span>
-                                        </span>
+                    <div class="nav-item dropdown border" :class="{ 'blink': error }">
+                        <button class="dropdown-toggle btn btn-success" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <div>
+                                <b>Cart :</b>
+                                <span class="badge rounded-pill text-bg-warning">
+                                    <font-awesome-icon icon="shopping-cart" />
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ cartQty }}
+                                        <span class="visually-hidden">unread messages</span>
                                     </span>
-                                </div>
-                                <price :price="cartTotal" />
-                            </button>
-                            <div class="dropdown-menu pb-0" data-bs-theme="light">
-                                <div v-for="( item, index ) in   cart  " :key="index">
-                                    <div class="align-items-center p-2">
-                                        <p class=" text-center text-wrap m-0 p-0">{{ item.product.name }}</p>
-                                        <div class="d-flex flex-column justify-content-center align-items-center">
-                                            <b>
-                                                <Price :price="Number(item.product.price) * item.qty"></Price>
-                                            </b>
-                                            <div>
-                                                <span> Qty<b> : {{ item.qty }}</b> </span>
-                                                <a class="badge text-bg-success ms-2" href="#"
-                                                    @click.stop="addItemToCart(item.product)">
-                                                    <font-awesome-icon icon="plus" />
-                                                </a>
-                                                <a class="badge text-bg-danger ms-2" href="#"
-                                                    @click.stop="removeItem(index)">
-                                                    <font-awesome-icon icon="trash-can" />
-                                                </a>
-                                            </div>
+                                </span>
+                            </div>
+                            <price :price="cartTotal" />
+                        </button>
+                        <div v-if="!isCartEmpty" class="dropdown-menu pb-0" data-bs-theme="light">
+                            <div v-for="( item, index ) in cart" :key="index">
+                                <div class="align-items-center p-2">
+                                    <p class=" text-center text-wrap m-0 p-0">{{ item.product.name }}</p>
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <b>
+                                            <Price :price="Number(item.product.price) * item.qty"></Price>
+                                        </b>
+                                        <div>
+                                            <span> Qty<b> : {{ item.qty }}</b> </span>
+                                            <a class="badge text-bg-success ms-2" href="#"
+                                                @click.stop="addItemToCart(item.product)">
+                                                <font-awesome-icon icon="plus" />
+                                            </a>
+                                            <a class="badge text-bg-danger ms-2" href="#" @click.stop="removeItem(index)">
+                                                <font-awesome-icon icon="trash-can" />
+                                            </a>
                                         </div>
                                     </div>
-                                    <hr class="dropdown-divider m-0">
                                 </div>
                                 <hr class="dropdown-divider m-0">
-                                <router-link class="dropdown-item m-0 text-center hover-bg-warning" to="/checkout">
-                                    <b>CheckOut</b>
-                                </router-link>
                             </div>
+                            <hr class="dropdown-divider m-0">
+                            <router-link class="dropdown-item m-0 text-center hover-bg-warning" to="/checkout">
+                                <b>CheckOut</b>
+                            </router-link>
                         </div>
                     </div>
+
                     <button class="btn btn-sm btn-outline-success mx-2 px-4" @click="changeSliderStatus">
                         <font-awesome-icon icon="dollar-sign"></font-awesome-icon>
                     </button>
@@ -81,16 +79,15 @@ import PriceSlider from './PriceSlider.vue'
 
 import { useProductsStore } from '@/store/index-pinia';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 
 const { changeSliderStatus, removeItem, addItemToCart } = useProductsStore()
 const { cart, cartTotal, cartQty, title, error, searchQuery } = storeToRefs(useProductsStore())
 
 const query = ref('')
-const search = () => {
-    searchQuery.value = query.value
-}
+const search = () => searchQuery.value = query.value
+const isCartEmpty = computed(() => cart.value.length < 1)
 </script>
 
 <style scoped lang="scss">

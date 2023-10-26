@@ -1,8 +1,8 @@
 <template>
-    <div class="container-fluid">
-        <transition-group class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" v-if="products" name="custom"
-            tag="div" @beforeEnter="beforeEnter" @enter="enter" @leave="leave">
-            <div class="d-flex mt-3" v-for="(item, index) in filteredProduct" :key="item.id" :data-index="index">
+    <div class="h-100">
+        <transition-group class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" name="custom" tag="div"
+            @beforeEnter="beforeEnter" @enter="enter" @leave="leave">
+            <div class="d-flex mt-3" v-for="(item, index) in filteredProducts" :key="item.id" :data-index="index">
                 <div class="card">
                     <img :src="item.image" :alt="item.name">
                     <div class="card-body d-flex flex-column">
@@ -27,10 +27,15 @@
                 </div>
             </div>
         </transition-group>
+        <div v-if="products.length && filteredProducts.length < 1"
+            class="h-100 d-flex justify-content-center align-items-center">
+            <h1>Items "{{ searchQuery }}" Not Found</h1>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+
 import Price from './PriceItem.vue';
 
 import { useProductsStore } from '@/store/index-pinia'
@@ -39,11 +44,10 @@ import { storeToRefs } from 'pinia';
 const store = useProductsStore()
 
 // accesing action
-const { addItemToCart, fetchProducts, setTitle } = store
+const { addItemToCart, fetchProducts, setTitle, searchQuery } = store
 
 // accesing state/refs and getters
-const { products, filteredProducts: filteredProduct, isItemInCart } = storeToRefs(store)
-
+const { products, filteredProducts, isItemInCart } = storeToRefs(store)
 // prevent calling api if product already fetched
 products.value.length < 1 ? fetchProducts() : undefined;
 setTitle('IDShop')
@@ -56,7 +60,9 @@ function enter(el: Element): void {
     if (el instanceof HTMLElement && el.dataset.index) {
         const delay = Number(el.dataset.index) * 100;
         setTimeout(() => {
-            el.className = "animate__animated animate__fadeInRight d-flex mt-3";
+            filteredProducts.value.length > 0
+                ? el.className = "d-flex mt-3 animate__animated animate__fadeInRight"
+                : el.className = "d-none"
         }, delay);
     }
 }

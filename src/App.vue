@@ -1,11 +1,8 @@
 <template>
-  <div id="app" :class="isLoading">
+  <div id="app" class="h-100 d-flex" :class="isLoading">
     <nav-bar v-if="!loading" />
-    <router-view />
-
-    <div v-if="loading">
-      <h1>Loading...</h1>
-    </div>
+    <router-view :class="{ 'flex-fill': !loading }" />
+    <h1 v-if="loading">Loading...</h1>
   </div>
 </template>
 
@@ -14,8 +11,14 @@ import NavBar from "@/components/NavBar.vue"
 
 import { useProductsStore } from '@/store/index-pinia'
 import { storeToRefs } from 'pinia';
+import { computed } from "vue";
+const { loading } = storeToRefs(useProductsStore())
 
-const { loading, isLoading } = storeToRefs(useProductsStore())
+const isLoading = computed(() =>
+  loading.value
+    ? "justify-content-center align-items-center"
+    : "flex-column container-fluid"
+)
 
 /**
  * Vuex
