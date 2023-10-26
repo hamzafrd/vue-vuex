@@ -44,10 +44,10 @@ import { storeToRefs } from 'pinia';
 const store = useProductsStore()
 
 // accesing action
-const { addItemToCart, fetchProducts, setTitle, searchQuery } = store
+const { addItemToCart, fetchProducts, setTitle } = store
 
 // accesing state/refs and getters
-const { products, filteredProducts, isItemInCart } = storeToRefs(store)
+const { products, filteredProducts, isItemInCart, searchQuery } = storeToRefs(store)
 // prevent calling api if product already fetched
 products.value.length < 1 ? fetchProducts() : undefined;
 setTitle('IDShop')
